@@ -4,12 +4,15 @@
 
 (require openssl/md5)
 
+(define (my-string-prefix? str prefix)
+  (regexp-match (regexp (string-append "^" prefix)) str))
+
 (define (hash str num)
   (md5 (open-input-string (string-append str (number->string num)))))
 
 (define (first-hash prefix search-prefix)
   (define (loop num)
-    (if (string-prefix? (hash prefix num) search-prefix)
+    (if (my-string-prefix? (hash prefix num) search-prefix)
         num
         (loop (+ num 1))))
   (loop 1))
